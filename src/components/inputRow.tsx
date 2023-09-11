@@ -3,7 +3,10 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import { getItemIds } from '../actions/getItemIds';
 import { getItemPrices } from '../actions/getItemPrices';
 
+import { cheapestSinglePurchase, cheapestCombinedPurchase } from '../utils/prices';
+
 import { universalisListing } from '../types/universalis';
+import InfoRow from './infoRow';
 
 const lightDataCenter = ['alpha', 'lich', 'odin', 'phoenix', 'raiden', 'shiva', 'twintania', 'zodiark'];
 
@@ -21,6 +24,8 @@ const InputRow: React.FunctionComponent = () => {
   const [shivaItems, setShivaItems] =useState<universalisListing[]>();
   const [twintaniaItems, setTwintaniaItems] =useState<universalisListing[]>();
   const [zodiarkItems, setZodiarkItems] =useState<universalisListing[]>();
+  const [cheapestRaiden, setCheapestRaiden] = useState<universalisListing>();
+  const [cheapestMultiRaiden, setCheapestMultiRaiden] = useState<universalisListing[]>();
 
   useEffect(() => {
     const fetchItemPrices = async () => {
@@ -59,7 +64,6 @@ const InputRow: React.FunctionComponent = () => {
               break;
             }
             case 'raiden': {
-              console.log(price);
               raiden.push(price);
               break;
             }
@@ -97,7 +101,6 @@ const InputRow: React.FunctionComponent = () => {
     const fetchItemIds = async () => {
       const items = await getItemIds(itemName);
       items.map((item) => {
-        console.log('item', item);
         if (item.UrlType.toLowerCase() === 'item' && item.Name.toLowerCase() === itemName.toLowerCase()) {
           setItemId(item.ID);
         }
@@ -108,6 +111,15 @@ const InputRow: React.FunctionComponent = () => {
       fetchItemIds();
     }
   }, [readyToFetch, itemName]);
+
+  useEffect(() => {
+    if (raidenItems) {
+      const cheapestRaiden = cheapestSinglePurchase(raidenItems, quantity);
+      const cheapestMulti = cheapestCombinedPurchase(raidenItems, quantity);
+      setCheapestRaiden(cheapestRaiden);
+      setCheapestMultiRaiden(cheapestMulti);
+    }
+  }, [raidenItems, quantity]);
 
   const handleItemChange = (event: ChangeEvent<HTMLInputElement>) => {
     setItemName(event.target.value);
@@ -134,8 +146,8 @@ const InputRow: React.FunctionComponent = () => {
       </label>
       {!itemId && <input type='button' value='fetch data' onClick={handleSubmit}/>}
       {itemId && itemPrices?.length === 0 && <label>{itemId}</label>}
-      {itemPrices && itemPrices.length > 0 && <>
-        <div>{itemPrices[0].pricePerUnit} gil on {itemPrices[0].worldName}</div>
+      {itemPrices && itemPrices.length > 0 && cheapestRaiden && <>
+        <InfoRow priceDetails={cheapestRaiden} multiPrice={cheapestMultiRaiden}/>
       </>}
     </>
   )
