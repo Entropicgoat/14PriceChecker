@@ -146,9 +146,7 @@ const InputRow: React.FunctionComponent = () => {
       </label>
       {!itemId && <input type='button' value='fetch data' onClick={handleSubmit}/>}
       {itemId && itemPrices?.length === 0 && <label>{itemId}</label>}
-      {itemPrices && itemPrices.length > 0 && cheapestRaiden && <>
-        <InfoRow priceDetails={cheapestRaiden} multiPrice={cheapestMultiRaiden}/>
-      </>}
+      
     </>
   )
 }
