@@ -1,4 +1,4 @@
-import React, { createContext, ChangeEvent, useEffect, useState } from 'react';
+import { createContext, ChangeEvent, useEffect, useState } from 'react';
 
 // Enums
 import { Light } from '../enums/dataCenter';
@@ -16,10 +16,10 @@ type UniversalisMarketDataProviderProps = {
 const UniversalisMarketDataContext = createContext<any>({
   itemPrices: '',
   quantity: 1,
+  priceCheckItemCount: 1,
   handleItemChange: undefined,
   handleQuantityChange: undefined,
   handleSubmit: undefined
-
 });
 
 const UniversalisMarketDataProvider = ({children}: UniversalisMarketDataProviderProps) => {
