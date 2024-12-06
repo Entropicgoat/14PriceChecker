@@ -4,7 +4,7 @@ A small react app I made for checking prices of goods across multiple servers in
 
 # Install
 
-Pull and npm install + npm start. No backend or anything here just pulls from the universalis api.
+Pull and npm install + npm run dev. No backend or anything here just pulls from the universalis and XIVAPI apis.
 
 # Note
 
