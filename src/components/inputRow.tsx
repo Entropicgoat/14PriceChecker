@@ -101,8 +101,8 @@ const InputRow: React.FunctionComponent = () => {
     const fetchItemIds = async () => {
       const items = await getItemIds(itemName);
       items.map((item) => {
-        if (item.UrlType.toLowerCase() === 'item' && item.Name.toLowerCase() === itemName.toLowerCase()) {
-          setItemId(item.ID);
+        if (item.fields.Name.toLowerCase() === itemName.toLowerCase()) {
+          setItemId(item.row_id);
         }
       });
       setReadyToFetch(false);
@@ -114,10 +114,10 @@ const InputRow: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (raidenItems) {
-      const cheapestRaiden = cheapestSinglePurchase(raidenItems, quantity);
-      const cheapestMulti = cheapestCombinedPurchase(raidenItems, quantity);
-      setCheapestRaiden(cheapestRaiden);
-      setCheapestMultiRaiden(cheapestMulti);
+      //const cheapestRaiden = cheapestSinglePurchase(raidenItems, quantity);
+      //const cheapestMulti = cheapestCombinedPurchase(raidenItems, quantity);
+      //setCheapestRaiden(cheapestRaiden);
+      //setCheapestMultiRaiden(cheapestMulti);
     }
   }, [raidenItems, quantity]);
 

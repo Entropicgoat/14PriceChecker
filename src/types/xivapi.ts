@@ -1,23 +1,23 @@
-export type xivApiResults = {
-  ID: number,
-  Icon: string,
-  Name: string,
-  Url: string,
-  UrlType: string,
-  _: string,
-  _Score: number
+type xivApiIcon = {
+  id: number;
+  path: string;
+  path_hr1: string;
 }
 
-export type xivApiResponse = {
-  Pagination: {
-    Page: number,
-    PageNext: number|null,
-    PagePrev: number|null,
-    PageTotal: number,
-    Results: number,
-    ResultsPerPage: number,
-    ResultsTotal: number
-  },
-  Results: xivApiResults[],
-  SpeedMs: number
-}
+type xivApiFieldsBeta = {
+  Icon: xivApiIcon;
+  Name: string;
+  Singular: string;
+};
+
+export type xivApiResultsBeta = {
+  score: number;
+  sheet: string;
+  row_id: number;
+  fields: xivApiFieldsBeta;
+};
+
+export type xivApiResponseBeta = {
+  schema: string;
+  results: xivApiResultsBeta[];
+};

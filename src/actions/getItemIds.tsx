@@ -1,14 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
 
-import {xivApiResults, xivApiResponse} from '../types/xivapi';
+import {xivApiResultsBeta, xivApiResponseBeta} from '../types/xivapi';
 
 const API = axios.create({});
 
-export const getItemIds = async (itemName: string): Promise<xivApiResults[]> => {
-  const itemIds: AxiosResponse<xivApiResponse> = await API({
+export const getItemIds = async (itemName: string): Promise<xivApiResultsBeta[]> => {
+  const response: AxiosResponse<xivApiResponseBeta> = await API({
     method: 'get',
-    url: `https://xivapi.com/search?string=${itemName}`,
+    url: `https://beta.xivapi.com/api/1/search?query=Name~"${itemName}"&sheets=Item`
   });
 
-  return itemIds.data.Results;
+  return response.data.results;
 }
