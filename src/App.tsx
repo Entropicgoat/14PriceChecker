@@ -33,7 +33,8 @@ const App = () => {
         <img src={meteor} className="logo vanilla" alt="Final Fantasy 14 meteor" />
         <h1>Final fantasy 14 price checker</h1>
         <p className="greyText">
-          Powered by <a href="https://universalis.app/" target="_blank">universalis</a>
+          Powered by <a href="https://universalis.app/" target="_blank">universalis</a> and
+          <a href="https://beta.xivapi.com/api/1/docs" target="_blank">XIVAPI</a>
         </p>
       </div>
       <div>
