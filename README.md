@@ -8,4 +8,4 @@ Pull and npm install + npm run dev. No backend or anything here just pulls from 
 
 # Note
 
-Last I checked the api I used to translate the item name into item ids was not working so this may or may not work.
+Using XIVAPI beta so it may at some point in the future just stop working. The functionality is still not fully reworked and so it fetches prices but shows nothing just yet.
