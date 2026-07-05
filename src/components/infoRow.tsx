@@ -1,30 +1,47 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React from 'react';
 
 import { universalisListing } from '../types/universalis';
+import { purchasePlan, worldPurchasePlan, groupListingsByWorld } from '../utils/prices';
 
 
 type infoProps = {
-  priceDetails: universalisListing,
-  multiPrice: universalisListing[]|undefined
+  single: universalisListing|undefined;
+  singleWorld: worldPurchasePlan|undefined;
+  combined: purchasePlan|undefined;
 }
 
 const InfoRow: React.FunctionComponent<infoProps> = (props: infoProps) => {
-  const {priceDetails, multiPrice} = props;
-  let summedPrice: number = 0;
-  let summedCount: number = 0;
+  const { single, singleWorld, combined } = props;
 
-  const totalPrice = priceDetails.pricePerUnit * priceDetails.quantity;
-  if (multiPrice) {
-    multiPrice.map((price) => {
-      summedPrice += (price.pricePerUnit * price.quantity);
-      summedCount += price.quantity;
-    })
+  if (!single && !singleWorld && !combined) {
+    return <p>Not enough listings to cover that quantity.</p>;
   }
 
-  return(
+  // Only worth showing the multi-world plan when it actually beats staying on
+  // one server (or no single server can cover the quantity).
+  const combinedIsBetter = combined && (!singleWorld || combined.totalCost < singleWorld.totalCost);
+
+  return (
     <div>
-      <p>Cheapest single purchase: {totalPrice} gil for {priceDetails.quantity} on {priceDetails.worldName}</p>
-      {summedPrice > 0 && summedCount > 0 && <p>Or {summedPrice} gil for {summedCount} on {priceDetails.worldName}</p>}
+      {single &&
+        <p>Cheapest single listing: {single.pricePerUnit * single.quantity} gil for {single.quantity} on {single.worldName}</p>}
+      {singleWorld &&
+        <p>
+          Cheapest single server: {singleWorld.totalCost} gil for {singleWorld.totalQuantity} on {singleWorld.worldName}
+          &nbsp;({singleWorld.listings.length} {singleWorld.listings.length === 1 ? 'listing' : 'listings'})
+        </p>}
+      {combinedIsBetter &&
+        <>
+          <p>Cheapest combined: {combined.totalCost} gil for {combined.totalQuantity} across:</p>
+          <ul>
+            {Object.entries(groupListingsByWorld(combined.listings)).map(([worldName, listings]) => (
+              <li key={worldName}>
+                {worldName}: {listings.reduce((sum, l) => sum + l.pricePerUnit * l.quantity, 0)} gil
+                &nbsp;for {listings.reduce((sum, l) => sum + l.quantity, 0)} ({listings.length} {listings.length === 1 ? 'listing' : 'listings'})
+              </li>
+            ))}
+          </ul>
+        </>}
     </div>
   )
 }

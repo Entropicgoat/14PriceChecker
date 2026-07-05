@@ -1,3 +1,9 @@
+export type universalisDataCenter = {
+  name: string;
+  region: string;
+  worlds: number[];
+}
+
 type recentHistory = {
   buyerName: string;
   hq: boolean;
@@ -16,16 +22,17 @@ export type universalisListing = {
   hq: boolean;
   isCrafted: boolean;
   lastReviewTime: number;
-  listingId: string;
-  materia: [];
+  listingID: string;
+  materia: { slotID: number; materiaID: number }[];
   onMannequin: boolean;
   pricePerUnit: number;
   quantity: number;
   retainerCity: number;
-  retainerId: string;
+  retainerID: string;
   retainerName: string;
-  sellerID: string;
+  sellerID: null|string;
   stainID: number;
+  tax: number;
   total: number;
   worldID: number;
   worldName: string;
@@ -54,10 +61,10 @@ export type universalisPriceResponse = {
   recentHistoryCount: number;
   regionName: string;
   regularSaleVelocity: number;
-  stackSizeHistogram: any;
-  stackSizeHistogramHQ: any;
-  stackSizeHistogramNQ: any;
+  stackSizeHistogram: Record<string, number>;
+  stackSizeHistogramHQ: Record<string, number>;
+  stackSizeHistogramNQ: Record<string, number>;
   unitsForSale: number;
   unitsSold: number;
-  worldUploadTimes: any
+  worldUploadTimes: Record<string, number>;
 }

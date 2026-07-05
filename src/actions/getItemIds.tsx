@@ -1,14 +1,12 @@
-import axios, { AxiosResponse } from 'axios';
-
 import {xivApiResultsBeta, xivApiResponseBeta} from '../types/xivapi';
 
-const API = axios.create({});
-
 export const getItemIds = async (itemName: string): Promise<xivApiResultsBeta[]> => {
-  const response: AxiosResponse<xivApiResponseBeta> = await API({
-    method: 'get',
-    url: `https://beta.xivapi.com/api/1/search?query=Name~"${itemName}"&sheets=Item`
-  });
+  const query = encodeURIComponent(`Name~"${itemName}"`);
+  const response = await fetch(`https://beta.xivapi.com/api/1/search?query=${query}&sheets=Item`);
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
 
-  return response.data.results;
+  const data: xivApiResponseBeta = await response.json();
+  return data.results;
 }

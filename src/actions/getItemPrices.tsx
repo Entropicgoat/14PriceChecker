@@ -1,14 +1,11 @@
-import axios, { AxiosResponse } from 'axios';
-
 import {universalisPriceResponse, universalisListing} from '../types/universalis';
 
-const API = axios.create({});
+export const getItemPrices = async (itemId: number, dataCenter: string): Promise<universalisListing[]> => {
+  const response = await fetch(`https://universalis.app/api/v2/${encodeURIComponent(dataCenter)}/${itemId}`);
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
 
-export const getItemPrices = async (itemId: number): Promise<universalisListing[]> => {
-  const itemIds: AxiosResponse<universalisPriceResponse> = await API({
-    method: 'get',
-    url: `https://universalis.app/api/v2/Europe/${itemId}`,
-  });
-
-  return itemIds.data.listings;
+  const data: universalisPriceResponse = await response.json();
+  return data.listings;
 }
