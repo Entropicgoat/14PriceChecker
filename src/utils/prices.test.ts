@@ -5,6 +5,7 @@ import {
   cheapestPurchase,
   cheapestSingleWorldPurchase,
   cheapestCombinedPurchase,
+  groupListingsByWorld,
 } from './prices';
 import { universalisListing } from '../types/universalis';
 
@@ -30,6 +31,25 @@ const listing = (overrides: Partial<universalisListing>): universalisListing => 
   worldID: 0,
   worldName: 'Odin',
   ...overrides,
+});
+
+describe('groupListingsByWorld', () => {
+  it('returns an empty object for an empty array', () => {
+    expect(groupListingsByWorld([])).toEqual({});
+  });
+
+  it('groups listings by world name, preserving order within each group', () => {
+    const odinFirst = listing({ worldName: 'Odin', listingID: 'odin-1' });
+    const shivaFirst = listing({ worldName: 'Shiva', listingID: 'shiva-1' });
+    const odinSecond = listing({ worldName: 'Odin', listingID: 'odin-2' });
+    const listings = [odinFirst, shivaFirst, odinSecond];
+
+    const grouped = groupListingsByWorld(listings);
+
+    expect(Object.keys(grouped)).toEqual(['Odin', 'Shiva']);
+    expect(grouped['Odin']).toEqual([odinFirst, odinSecond]);
+    expect(grouped['Shiva']).toEqual([shivaFirst]);
+  });
 });
 
 describe('cheapestSinglePurchase', () => {
